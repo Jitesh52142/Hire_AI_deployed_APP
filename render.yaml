@@ -7,17 +7,18 @@ services:
     startCommand: "gunicorn run:app"
     envVars:
       - key: PYTHON_VERSION
-        value: 3.8.17 
+        value: 3.10.12   # Use a stable Python version Render supports
       - key: SECRET_KEY
-        generateValue: true # Render will generate a random secret key
+        generateValue: true
       - key: MONGO_URI
-        fromService:
-          type: mongodb # Assumes you are using Render's MongoDB addon
-          name: hire-ai-db
+        fromDatabase:
+          name: hire-ai-db   # Correct for Render’s managed DB
           property: connectionString
       - key: N8N_WEBHOOK_URL
-        sync: false
       - key: ADMIN_EMAIL
-        sync: false
       - key: ADMIN_PASSWORD
-        sync: false
+
+databases:
+  - name: hire-ai-db
+    databaseName: hireai
+    plan: free
